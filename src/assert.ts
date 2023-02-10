@@ -8,6 +8,7 @@
  */
 
 import { Assert } from '@japa/assert'
+import slash from 'slash'
 import { FileSystem } from './file_system'
 
 declare module '@japa/assert' {
@@ -330,7 +331,7 @@ Assert.macro('hasFiles', async function (files: string[], message?: string) {
   this.incrementAssertionsCount()
 
   const directoryFiles = await this.fs.readDir()
-  const directoryFilesPaths = directoryFiles.map((file) => file.path)
+  const directoryFilesPaths = directoryFiles.map((file) => slash(file.path))
   const hasAllFiles = files.every((file) =>
     directoryFilesPaths.find((directoryFilePath) => directoryFilePath === file)
   )
@@ -349,7 +350,7 @@ Assert.macro('doesNotHaveFiles', async function (files: string[], message?: stri
   this.incrementAssertionsCount()
 
   const directoryFiles = await this.fs.readDir()
-  const directoryFilesPaths = directoryFiles.map((file) => file.path)
+  const directoryFilesPaths = directoryFiles.map((file) => slash(file.path))
   const doesNotHaveAllFiles = files.every(
     (file) => !directoryFilesPaths.find((directoryFilePath) => directoryFilePath === file)
   )
@@ -388,7 +389,7 @@ Assert.macro('dirIsEmpty', async function (dirPath?: string, message?: string) {
     this.evaluate(isEmpty, 'expected #{this} directory to be empty', {
       thisObject: dirPath,
       expected: [],
-      actual: directoryFiles.map(({ path }) => path),
+      actual: directoryFiles.map(({ path }) => slash(path)),
       showDiff: true,
       prefix: message,
       operator: 'deepStrictEqual',
@@ -401,7 +402,7 @@ Assert.macro('dirIsEmpty', async function (dirPath?: string, message?: string) {
     this.evaluate(isEmpty, 'expected file system base directory to be empty', {
       thisObject: '',
       expected: [],
-      actual: directoryFiles.map(({ path }) => path),
+      actual: directoryFiles.map(({ path }) => slash(path)),
       showDiff: true,
       prefix: message,
       operator: 'deepStrictEqual',
