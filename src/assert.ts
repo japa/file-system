@@ -66,12 +66,12 @@ declare module '@japa/assert' {
     /**
      * Assert all the mentioned files exists
      */
-    hasFiles(fileToExpect: string[], message?: string): Promise<void>
+    hasFiles(filesToExpect: string[], message?: string): Promise<void>
 
     /**
      * Assert all the mentioned files does not exists
      */
-    doesNotHaveFiles(fileToBeMissing: string[], message?: string): Promise<void>
+    doesNotHaveFiles(filesToBeMissing: string[], message?: string): Promise<void>
 
     /**
      * Assert a given directory to have no files

@@ -1,15 +1,43 @@
 @japa/file-system
-> File system plugin for writing assertions for files and directories
-
-<br />
-
-<div align="center">
+> File system plugin for Japa
 
 [![gh-workflow-image]][gh-workflow-url] [![npm-image]][npm-url] ![][typescript-image] [![license-image]][license-url] [![snyk-image]][snyk-url]
 
-</div>
+The file system plugin allows you to easily manage files and directories during tests and write assertions against them.
 
-[gh-workflow-image]: https://img.shields.io/github/workflow/status/japa/file-system/test?style=for-the-badge
+#### [Complete API documentation](https://japa.dev/docs/plugins/assert)
+
+## Installation
+You can install the plugin from the npm packages registry as follows.
+
+```sh
+npm i -D @japa/file-system
+```
+
+## Usage
+The next step is registering the plugin inside the `plugins` array.
+
+```ts
+import { fileSystem } from '@japa/file-system'
+
+configure({
+  plugins: [fileSystem()]
+})
+```
+
+Once the plugin has been registered, you can access the `fs` property from the test context. The `fs` property exposes the helper functions to **read** and **write** files. For example:
+
+```ts
+test('read rc file', async ({ fs }) => {
+  await fs.write('rc.json', JSON.stringify({
+    foo: 'bar'
+  }))
+
+  await runMethodThatNeedsRcFile()
+})
+```
+
+[gh-workflow-image]: https://img.shields.io/github/actions/workflow/status/japa/file-system/test.yml?style=for-the-badge
 [gh-workflow-url]: https://github.com/japa/file-system/actions/workflows/test.yml "Github action"
 
 [npm-image]: https://img.shields.io/npm/v/@japa/file-system/latest.svg?style=for-the-badge&logo=npm
