@@ -2,13 +2,14 @@
   "name": "@japa/file-system",
   "version": "1.0.0",
   "description": "File system plugin for writing assertions for files and directories",
+  "main": "./build/index.js",
   "files": [
-    "src",
-    "index.d.ts",
-    "index.js"
+    "build/src",
+    "build/index.d.ts",
+    "build/index.js"
   ],
   "exports": {
-    ".": "./index.js"
+    ".": "./build/index.js"
   },
   "type": "commonjs",
   "scripts": {
@@ -115,5 +116,16 @@
     "tag": "latest",
     "branch": "main",
     "anyBranch": false
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/japa/file-system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/japa/file-system/issues"
+  },
+  "homepage": "https://github.com/japa/file-system#readme"
 }
