@@ -1,6 +1,6 @@
 {
   "name": "@japa/file-system",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "File system plugin for writing assertions for files and directories",
   "files": [
     "src",
