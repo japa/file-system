@@ -7,8 +7,8 @@
  * file that was distributed with this source code.
  */
 
-import { Assert } from '@japa/assert'
 import slash from 'slash'
+import { Assert } from '@japa/assert'
 import { FileSystem } from './file_system'
 
 declare module '@japa/assert' {

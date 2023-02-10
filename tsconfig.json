@@ -10,6 +10,7 @@
     "declaration": true,
     "rootDir": "./",
     "outDir": "./build",
+    "esModuleInterop": true,
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
