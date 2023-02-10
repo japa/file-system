@@ -5,7 +5,7 @@
 
 The file system plugin allows you to easily manage files and directories during tests and write assertions against them.
 
-#### [Complete API documentation](https://japa.dev/docs/plugins/assert)
+#### [Complete API documentation](https://japa.dev/docs/plugins/file-system)
 
 ## Installation
 You can install the plugin from the npm packages registry as follows.
