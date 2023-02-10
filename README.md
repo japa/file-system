@@ -1,4 +1,4 @@
-@japa/file-system
+# @japa/file-system
 > File system plugin for Japa
 
 [![gh-workflow-image]][gh-workflow-url] [![npm-image]][npm-url] ![][typescript-image] [![license-image]][license-url] [![snyk-image]][snyk-url]
