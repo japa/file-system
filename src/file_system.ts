@@ -104,4 +104,18 @@ export class FileSystem {
       ? readDir.promise(this.#makePath(dirPath), { type: 'files' })
       : readDir.promise(this.basePath, { type: 'files' })
   }
+
+  /**
+   * Create a json file
+   */
+  async createJson(filePath: string, contents: any, options?: fs.WriteFileOptions) {
+    return this.adapter.writeJson(this.#makePath(filePath), contents, options)
+  }
+
+  /**
+   * Read and parse a json file
+   */
+  async contentsJson(filePath: string) {
+    return this.adapter.readJson(this.#makePath(filePath))
+  }
 }

@@ -65,3 +65,4 @@ export function fileSystem(options?: { basePath?: string | URL; autoClean?: bool
 
 export type { EntryInfo } from 'readdirp'
 export type { WriteFileOptions } from 'fs-extra'
+export type { FileSystem } from './src/file_system'
