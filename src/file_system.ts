@@ -108,8 +108,8 @@ export class FileSystem {
   /**
    * Create a json file
    */
-  async createJson(filePath: string, contents: any, options?: fs.WriteFileOptions) {
-    return this.adapter.writeJson(this.#makePath(filePath), contents, options)
+  async createJson(filePath: string, contents: any, options?: fs.JsonOutputOptions) {
+    return this.adapter.outputJSON(this.#makePath(filePath), contents, options)
   }
 
   /**
