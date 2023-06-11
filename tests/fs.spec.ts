@@ -36,4 +36,16 @@ test.group('File system', (group) => {
     assert.isFalse(await fs.exists('foo.txt'))
     assert.isFalse(await fs.rootExists())
   })
+
+  test('can extend file system class', async ({ assert }) => {
+    FileSystem.macro('createHelloFile', function (path: string, name: string) {
+      return this.createJson(path, { hello: name })
+    })
+
+    const fs = new FileSystem(BASE_PATH)
+
+    // @ts-ignore
+    await fs.createHelloFile('foo.json', 'jul')
+    assert.deepEqual(await fs.contentsJson('foo.json'), { hello: 'jul' })
+  })
 })

@@ -63,6 +63,6 @@ export function fileSystem(options?: { basePath?: string | URL; autoClean?: bool
   return fsPlugin
 }
 
+export { FileSystem } from './src/file_system'
 export type { EntryInfo } from 'readdirp'
 export type { WriteFileOptions } from 'fs-extra'
-export type { FileSystem } from './src/file_system'
