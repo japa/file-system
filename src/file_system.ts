@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import * as fs from 'fs-extra'
+import fs from 'fs-extra'
 import readDir from 'readdirp'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'

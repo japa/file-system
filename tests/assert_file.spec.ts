@@ -7,16 +7,13 @@
  * file that was distributed with this source code.
  */
 
-import { join } from 'node:path'
 import { remove } from 'fs-extra'
 import { test } from '@japa/runner'
 import { Assert } from '@japa/assert'
 
-import { FileSystem } from '../src/file_system'
-import '../src/assert'
-
-// eslint-disable-next-line unicorn/prefer-module
-const BASE_PATH = join(__dirname, './tmp')
+import { FileSystem } from '../src/file_system.js'
+import { BASE_PATH } from '../test_helpers/index.js'
+import '../src/assert.js'
 
 test.group('Assert | fileExists', (group) => {
   group.each.setup(() => {

@@ -19,8 +19,8 @@ import { tmpdir } from 'node:os'
 import { PluginFn } from '@japa/runner'
 import { fileURLToPath } from 'node:url'
 
-import './src/assert'
-import { FileSystem } from './src/file_system'
+import './src/assert.js'
+import { FileSystem } from './src/file_system.js'
 
 /**
  * The filesystem plugin for Japa
@@ -63,6 +63,6 @@ export function fileSystem(options?: { basePath?: string | URL; autoClean?: bool
   return fsPlugin
 }
 
-export { FileSystem } from './src/file_system'
+export { FileSystem } from './src/file_system.js'
 export type { EntryInfo } from 'readdirp'
 export type { WriteFileOptions } from 'fs-extra'
