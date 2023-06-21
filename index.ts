@@ -13,7 +13,7 @@ declare module '@japa/runner' {
   }
 }
 
-import cuid from 'cuid'
+import { createId } from '@paralleldrive/cuid2'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { PluginFn } from '@japa/runner'
@@ -27,7 +27,7 @@ import { FileSystem } from './src/file_system.js'
  */
 export function fileSystem(options?: { basePath?: string | URL; autoClean?: boolean }) {
   const normalizeOptions = Object.assign(
-    { basePath: join(tmpdir(), cuid()), autoClean: true },
+    { basePath: join(tmpdir(), createId()), autoClean: true },
     options
   )
 
