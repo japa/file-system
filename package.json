@@ -2,6 +2,9 @@
   "name": "@japa/file-system",
   "description": "File system plugin for writing assertions for files and directories",
   "version": "2.0.0-0",
+  "engines": {
+    "node": ">=18.16.0"
+  },
   "main": "./build/index.js",
   "type": "module",
   "files": [
@@ -12,9 +15,6 @@
     "build/index.js",
     "build/index.d.ts.map"
   ],
-  "engines": {
-    "node": ">=18.16.0"
-  },
   "exports": {
     ".": "./build/index.js"
   },
@@ -76,7 +76,11 @@
   "bugs": {
     "url": "https://github.com/japa/file-system/issues"
   },
-  "keywords": [],
+  "keywords": [
+    "japa",
+    "test",
+    "file-system"
+  ],
   "eslintConfig": {
     "extends": "@adonisjs/eslint-config/package"
   },
