@@ -35,7 +35,8 @@ test.group('File system', (group) => {
   })
 
   test('can extend file system class', async ({ assert }) => {
-    FileSystem.macro('createHelloFile', function (path: string, name: string) {
+    //@ts-ignore
+    FileSystem.macro('createHelloFile', function (this: Assert, path: string, name: string) {
       return this.createJson(path, { hello: name })
     })
 

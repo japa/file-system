@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-declare module '@japa/runner' {
+declare module '@japa/runner/core' {
   interface TestContext {
     fs: FileSystem
   }
@@ -16,8 +16,9 @@ declare module '@japa/runner' {
 import { createId } from '@paralleldrive/cuid2'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
-import { PluginFn } from '@japa/runner'
 import { fileURLToPath } from 'node:url'
+import { TestContext, Test } from '@japa/runner/core'
+import type { PluginFn } from '@japa/runner/types'
 
 import './src/assert.js'
 import { FileSystem } from './src/file_system.js'
@@ -39,23 +40,17 @@ export function fileSystem(options?: { basePath?: string | URL; autoClean?: bool
       ? normalizeOptions.basePath
       : fileURLToPath(normalizeOptions.basePath)
 
-  const fsPlugin: PluginFn = function (_, __, { TestContext }) {
-    TestContext.created((ctx) => {
-      /**
-       * Share fs property with context
-       */
-      ctx.fs = new FileSystem(baseRoot)
+  const fsPlugin: PluginFn = function () {
+    TestContext.getter('fs', () => new FileSystem(baseRoot), true)
 
+    Test.executing((test) => {
       /**
        * Share fs property with assert module
        */
-      ctx.assert.fs = ctx.fs
+      test.context.assert.fs = test.context.fs
 
-      /**
-       * Register auto clean hook
-       */
       if (normalizeOptions.autoClean) {
-        ctx.cleanup(() => ctx.fs.cleanup())
+        test.context.cleanup(() => test.context.fs.cleanup())
       }
     })
   }
@@ -64,5 +59,3 @@ export function fileSystem(options?: { basePath?: string | URL; autoClean?: bool
 }
 
 export { FileSystem } from './src/file_system.js'
-export type { EntryInfo } from 'readdirp'
-export type { WriteFileOptions } from 'fs-extra'

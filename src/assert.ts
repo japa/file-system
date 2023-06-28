@@ -86,7 +86,7 @@ declare module '@japa/assert' {
   }
 }
 
-Assert.macro('fileExists', async function (filePath: string, message?: string) {
+Assert.macro('fileExists', async function (this: Assert, filePath: string, message?: string) {
   this.incrementAssertionsCount()
 
   const hasFile = await this.fs.exists(filePath)
@@ -100,7 +100,7 @@ Assert.macro('fileExists', async function (filePath: string, message?: string) {
   })
 })
 
-Assert.macro('fileNotExists', async function (filePath: string, message?: string) {
+Assert.macro('fileNotExists', async function (this: Assert, filePath: string, message?: string) {
   this.incrementAssertionsCount()
 
   const hasFile = await this.fs.exists(filePath)
@@ -114,36 +114,39 @@ Assert.macro('fileNotExists', async function (filePath: string, message?: string
   })
 })
 
-Assert.macro('fileEquals', async function (filePath: string, contents: string, message?: string) {
-  this.incrementAssertionsCount()
+Assert.macro(
+  'fileEquals',
+  async function (this: Assert, filePath: string, contents: string, message?: string) {
+    this.incrementAssertionsCount()
 
-  const hasFile = await this.fs.exists(filePath)
-  if (!hasFile) {
-    this.evaluate(hasFile, 'expected #{this} file to exist', {
+    const hasFile = await this.fs.exists(filePath)
+    if (!hasFile) {
+      this.evaluate(hasFile, 'expected #{this} file to exist', {
+        thisObject: filePath,
+        expected: '',
+        actual: '',
+        showDiff: false,
+        prefix: message,
+        operator: 'exists',
+      })
+
+      return
+    }
+
+    const onDiskContents = await this.fs.contents(filePath)
+    this.evaluate(onDiskContents === contents, 'expected #{this} file contents to equal #{exp}', {
       thisObject: filePath,
-      expected: '',
-      actual: '',
-      showDiff: false,
+      expected: contents,
+      actual: onDiskContents,
       prefix: message,
-      operator: 'exists',
+      operator: 'strictEqual',
     })
-
-    return
   }
-
-  const onDiskContents = await this.fs.contents(filePath)
-  this.evaluate(onDiskContents === contents, 'expected #{this} file contents to equal #{exp}', {
-    thisObject: filePath,
-    expected: contents,
-    actual: onDiskContents,
-    prefix: message,
-    operator: 'strictEqual',
-  })
-})
+)
 
 Assert.macro(
   'fileContains',
-  async function (filePath: string, substring: string | RegExp, message?: string) {
+  async function (this: Assert, filePath: string, substring: string | RegExp, message?: string) {
     this.incrementAssertionsCount()
 
     const hasFile = await this.fs.exists(filePath)
@@ -198,7 +201,7 @@ Assert.macro(
 
 Assert.macro(
   'fileSameAs',
-  async function (filePath: string, otherFilePath: string, message?: string) {
+  async function (this: Assert, filePath: string, otherFilePath: string, message?: string) {
     this.incrementAssertionsCount()
 
     const hasFile = await this.fs.exists(filePath)
@@ -244,7 +247,7 @@ Assert.macro(
   }
 )
 
-Assert.macro('fileIsEmpty', async function (filePath: string, message?: string) {
+Assert.macro('fileIsEmpty', async function (this: Assert, filePath: string, message?: string) {
   this.incrementAssertionsCount()
 
   const hasFile = await this.fs.exists(filePath)
@@ -271,7 +274,7 @@ Assert.macro('fileIsEmpty', async function (filePath: string, message?: string) 
   })
 })
 
-Assert.macro('fileIsNotEmpty', async function (filePath: string, message?: string) {
+Assert.macro('fileIsNotEmpty', async function (this: Assert, filePath: string, message?: string) {
   this.incrementAssertionsCount()
 
   const hasFile = await this.fs.exists(filePath)
@@ -299,7 +302,7 @@ Assert.macro('fileIsNotEmpty', async function (filePath: string, message?: strin
   })
 })
 
-Assert.macro('dirExists', async function (dirPath: string, message?: string) {
+Assert.macro('dirExists', async function (this: Assert, dirPath: string, message?: string) {
   this.incrementAssertionsCount()
 
   const hasDir = await this.fs.exists(dirPath)
@@ -313,7 +316,7 @@ Assert.macro('dirExists', async function (dirPath: string, message?: string) {
   })
 })
 
-Assert.macro('dirNotExists', async function (dirPath: string, message?: string) {
+Assert.macro('dirNotExists', async function (this: Assert, dirPath: string, message?: string) {
   this.incrementAssertionsCount()
 
   const hasDir = await this.fs.exists(dirPath)
@@ -327,7 +330,7 @@ Assert.macro('dirNotExists', async function (dirPath: string, message?: string) 
   })
 })
 
-Assert.macro('hasFiles', async function (files: string[], message?: string) {
+Assert.macro('hasFiles', async function (this: Assert, files: string[], message?: string) {
   this.incrementAssertionsCount()
 
   const directoryFiles = await this.fs.readDir()
@@ -346,7 +349,7 @@ Assert.macro('hasFiles', async function (files: string[], message?: string) {
   })
 })
 
-Assert.macro('doesNotHaveFiles', async function (files: string[], message?: string) {
+Assert.macro('doesNotHaveFiles', async function (this: Assert, files: string[], message?: string) {
   this.incrementAssertionsCount()
 
   const directoryFiles = await this.fs.readDir()
@@ -365,7 +368,7 @@ Assert.macro('doesNotHaveFiles', async function (files: string[], message?: stri
   })
 })
 
-Assert.macro('dirIsEmpty', async function (dirPath?: string, message?: string) {
+Assert.macro('dirIsEmpty', async function (this: Assert, dirPath?: string, message?: string) {
   this.incrementAssertionsCount()
 
   const hasDir = dirPath ? await this.fs.exists(dirPath) : true
@@ -410,7 +413,7 @@ Assert.macro('dirIsEmpty', async function (dirPath?: string, message?: string) {
   }
 })
 
-Assert.macro('dirIsNotEmpty', async function (dirPath?: string, message?: string) {
+Assert.macro('dirIsNotEmpty', async function (this: Assert, dirPath?: string, message?: string) {
   this.incrementAssertionsCount()
 
   const hasDir = dirPath ? await this.fs.exists(dirPath) : true

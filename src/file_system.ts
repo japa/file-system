@@ -11,7 +11,7 @@ import fs from 'fs-extra'
 import readDir from 'readdirp'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { Macroable } from 'macroable'
+import Macroable from '@poppinss/macroable'
 
 /**
  * File system abstraction on top of `fs-extra` with a fixed basePath
@@ -33,12 +33,6 @@ export class FileSystem extends Macroable {
    * files
    */
   basePath: string
-
-  /**
-   * User defined macros and getters
-   */
-  static macros = {}
-  static getters = {}
 
   constructor(basePath: string) {
     super()
