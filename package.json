@@ -1,7 +1,7 @@
 {
   "name": "@japa/file-system",
   "description": "File system plugin for writing assertions for files and directories",
-  "version": "2.0.0-1",
+  "version": "2.0.0-2",
   "engines": {
     "node": ">=18.16.0"
   },
