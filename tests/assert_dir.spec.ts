@@ -8,17 +8,17 @@
  */
 
 import { join } from 'node:path'
-import { remove } from 'fs-extra'
 import { test } from '@japa/runner'
 import { Assert } from '@japa/assert'
-import { BASE_PATH } from '../test_helpers/index.js'
+import { rm, mkdir } from 'node:fs/promises'
 
-import { FileSystem } from '../src/file_system.js'
 import '../src/assert.js'
+import { FileSystem } from '../src/file_system.js'
+import { BASE_PATH } from '../test_helpers/index.js'
 
 test.group('Assert | dirExists', (group) => {
   group.each.setup(() => {
-    return () => remove(BASE_PATH)
+    return () => rm(BASE_PATH, { recursive: true, force: true, maxRetries: 10 })
   })
 
   test('report error when directory is missing', async ({ assert }) => {
@@ -50,7 +50,7 @@ test.group('Assert | dirExists', (group) => {
 
 test.group('Assert | dirNotExists', (group) => {
   group.each.setup(() => {
-    return () => remove(BASE_PATH)
+    return () => rm(BASE_PATH, { recursive: true, force: true, maxRetries: 10 })
   })
 
   test('report error when directory exists', async ({ assert }) => {
@@ -83,7 +83,7 @@ test.group('Assert | dirNotExists', (group) => {
 
 test.group('Assert | hasFiles', (group) => {
   group.each.setup(() => {
-    return () => remove(BASE_PATH)
+    return () => rm(BASE_PATH, { recursive: true, force: true, maxRetries: 10 })
   })
 
   test('report error when directory does not have expected files', async ({ assert }) => {
@@ -122,7 +122,7 @@ test.group('Assert | hasFiles', (group) => {
 
 test.group('Assert | doesNotHaveFiles', (group) => {
   group.each.setup(() => {
-    return () => remove(BASE_PATH)
+    return () => rm(BASE_PATH, { recursive: true, force: true, maxRetries: 10 })
   })
 
   test('report error when directory has any one file', async ({ assert }) => {
@@ -155,7 +155,7 @@ test.group('Assert | doesNotHaveFiles', (group) => {
 
 test.group('Assert | dirIsEmpty', (group) => {
   group.each.setup(() => {
-    return () => remove(BASE_PATH)
+    return () => rm(BASE_PATH, { recursive: true, force: true, maxRetries: 10 })
   })
 
   test('report error when filesystem is not empty', async ({ assert }) => {
@@ -227,14 +227,14 @@ test.group('Assert | dirIsEmpty', (group) => {
     const customAssert = new Assert()
     customAssert.fs = new FileSystem(BASE_PATH)
 
-    await customAssert.fs.adapter.ensureDir(join(BASE_PATH, 'foo'))
+    await mkdir(join(BASE_PATH, 'foo'), { recursive: true })
     await assert.doesNotRejects(() => customAssert.dirIsEmpty('foo'))
   })
 })
 
 test.group('Assert | dirIsNotEmpty', (group) => {
   group.each.setup(() => {
-    return () => remove(BASE_PATH)
+    return () => rm(BASE_PATH, { recursive: true, force: true, maxRetries: 10 })
   })
 
   test('report error when filesystem is empty', async ({ assert }) => {

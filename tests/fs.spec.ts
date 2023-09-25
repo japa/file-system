@@ -7,14 +7,14 @@
  * file that was distributed with this source code.
  */
 
-import { remove } from 'fs-extra'
 import { test } from '@japa/runner'
+import { rm } from 'node:fs/promises'
 import { FileSystem } from '../src/file_system.js'
 import { BASE_PATH } from '../test_helpers/index.js'
 
 test.group('File system', (group) => {
   group.each.setup(() => {
-    return () => remove(BASE_PATH)
+    return () => rm(BASE_PATH, { recursive: true, force: true, maxRetries: 10 })
   })
 
   test('get file stats', async ({ assert }) => {

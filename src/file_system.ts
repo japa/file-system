@@ -7,21 +7,19 @@
  * file that was distributed with this source code.
  */
 
-import fs from 'fs-extra'
 import readDir from 'readdirp'
-import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
+import { dirname, join } from 'node:path'
 import Macroable from '@poppinss/macroable'
+import { access, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises'
+import { type StatOptions, type WriteFileOptions, constants, RmOptions } from 'node:fs'
+
+import type { JSONFileOptions } from './types.js'
 
 /**
  * File system abstraction on top of `fs-extra` with a fixed basePath
  */
 export class FileSystem extends Macroable {
-  /**
-   * Underlying file adapter
-   */
-  adapter = fs
-
   /**
    * Base URL to the directory for reading and writing
    * files
@@ -47,55 +45,68 @@ export class FileSystem extends Macroable {
   /**
    * Cleanup directory
    */
-  async cleanup() {
-    return this.adapter.remove(this.basePath)
+  async cleanup(options?: RmOptions) {
+    return rm(this.basePath, { recursive: true, force: true, maxRetries: 10, ...options })
   }
 
   /**
    * Create a new file
    */
-  async create(filePath: string, contents: string, options?: fs.WriteFileOptions) {
-    return this.adapter.outputFile(this.#makePath(filePath), contents, options)
+  async create(filePath: string, contents: string, options?: WriteFileOptions) {
+    const absolutePath = this.#makePath(filePath)
+    await mkdir(dirname(absolutePath), { recursive: true })
+    return writeFile(this.#makePath(filePath), contents, options)
   }
 
   /**
    * Remove a file
    */
-  async remove(filePath: string) {
-    return this.adapter.remove(this.#makePath(filePath))
+  async remove(filePath: string, options?: RmOptions) {
+    return rm(this.#makePath(filePath), { recursive: true, force: true, maxRetries: 2, ...options })
   }
 
   /**
    * Check if the root of the filesystem exists
    */
   async rootExists() {
-    return this.adapter.pathExists(this.basePath)
+    try {
+      await access(this.basePath, constants.F_OK)
+      return true
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        return false
+      }
+      throw error
+    }
   }
 
   /**
    * Check if a file exists
    */
   async exists(filePath: string) {
-    return this.adapter.pathExists(this.#makePath(filePath))
+    try {
+      await access(this.#makePath(filePath), constants.F_OK)
+      return true
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        return false
+      }
+      throw error
+    }
   }
 
   /**
    * Returns file contents
    */
   async contents(filePath: string) {
-    return this.adapter.readFile(this.#makePath(filePath), 'utf-8')
+    return readFile(this.#makePath(filePath), 'utf-8')
   }
 
   /**
    * Returns stats for a file
    */
-  async stats(
-    filePath: string,
-    options?: fs.StatOptions & {
-      bigint?: false | undefined
-    }
-  ) {
-    return this.adapter.stat(this.#makePath(filePath), options)
+  async stats(filePath: string, options?: StatOptions) {
+    return stat(this.#makePath(filePath), options)
   }
 
   /**
@@ -110,14 +121,20 @@ export class FileSystem extends Macroable {
   /**
    * Create a json file
    */
-  async createJson(filePath: string, contents: any, options?: fs.JsonOutputOptions) {
-    return this.adapter.outputJSON(this.#makePath(filePath), contents, options)
+  async createJson(filePath: string, contents: any, options?: JSONFileOptions) {
+    if (options && typeof options === 'object') {
+      const { replacer, spaces, ...rest } = options
+      return this.create(filePath, JSON.stringify(contents, replacer, spaces), rest)
+    }
+
+    return this.create(filePath, JSON.stringify(contents), options)
   }
 
   /**
    * Read and parse a json file
    */
   async contentsJson(filePath: string) {
-    return this.adapter.readJson(this.#makePath(filePath))
+    const contents = await readFile(this.#makePath(filePath), 'utf-8')
+    return JSON.parse(contents)
   }
 }

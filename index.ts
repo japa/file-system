@@ -13,12 +13,12 @@ declare module '@japa/runner/core' {
   }
 }
 
-import { createId } from '@paralleldrive/cuid2'
-import { join } from 'node:path'
 import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { TestContext, Test } from '@japa/runner/core'
+import { createId } from '@paralleldrive/cuid2'
 import type { PluginFn } from '@japa/runner/types'
+import { TestContext, Test } from '@japa/runner/core'
 
 import './src/assert.js'
 import { FileSystem } from './src/file_system.js'

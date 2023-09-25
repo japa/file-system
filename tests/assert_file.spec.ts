@@ -7,17 +7,17 @@
  * file that was distributed with this source code.
  */
 
-import { remove } from 'fs-extra'
 import { test } from '@japa/runner'
 import { Assert } from '@japa/assert'
+import { rm } from 'node:fs/promises'
 
+import '../src/assert.js'
 import { FileSystem } from '../src/file_system.js'
 import { BASE_PATH } from '../test_helpers/index.js'
-import '../src/assert.js'
 
 test.group('Assert | fileExists', (group) => {
   group.each.setup(() => {
-    return () => remove(BASE_PATH)
+    return () => rm(BASE_PATH, { recursive: true, force: true, maxRetries: 10 })
   })
 
   test('report error when file is missing', async ({ assert }) => {
@@ -49,7 +49,7 @@ test.group('Assert | fileExists', (group) => {
 
 test.group('Assert | fileNotExists', (group) => {
   group.each.setup(() => {
-    return () => remove(BASE_PATH)
+    return () => rm(BASE_PATH, { recursive: true, force: true, maxRetries: 10 })
   })
 
   test('report error when file exists', async ({ assert }) => {
@@ -82,7 +82,7 @@ test.group('Assert | fileNotExists', (group) => {
 
 test.group('Assert | fileEquals', (group) => {
   group.each.setup(() => {
-    return () => remove(BASE_PATH)
+    return () => rm(BASE_PATH, { recursive: true, force: true, maxRetries: 10 })
   })
 
   test('report error when file is missing', async ({ assert }) => {
@@ -134,7 +134,7 @@ test.group('Assert | fileEquals', (group) => {
 
 test.group('Assert | fileContains', (group) => {
   group.each.setup(() => {
-    return () => remove(BASE_PATH)
+    return () => rm(BASE_PATH, { recursive: true, force: true, maxRetries: 10 })
   })
 
   test('report error when file is missing', async ({ assert }) => {
@@ -216,7 +216,7 @@ test.group('Assert | fileContains', (group) => {
 
 test.group('Assert | fileSameAs', (group) => {
   group.each.setup(() => {
-    return () => remove(BASE_PATH)
+    return () => rm(BASE_PATH, { recursive: true, force: true, maxRetries: 10 })
   })
 
   test('report error when file is missing', async ({ assert }) => {
@@ -281,7 +281,7 @@ test.group('Assert | fileSameAs', (group) => {
 
 test.group('Assert | fileIsEmpty', (group) => {
   group.each.setup(() => {
-    return () => remove(BASE_PATH)
+    return () => rm(BASE_PATH, { recursive: true, force: true, maxRetries: 10 })
   })
 
   test('report error when file is missing', async ({ assert }) => {
@@ -333,7 +333,7 @@ test.group('Assert | fileIsEmpty', (group) => {
 
 test.group('Assert | fileIsNotEmpty', (group) => {
   group.each.setup(() => {
-    return () => remove(BASE_PATH)
+    return () => rm(BASE_PATH, { recursive: true, force: true, maxRetries: 10 })
   })
 
   test('report error when file is missing', async ({ assert }) => {

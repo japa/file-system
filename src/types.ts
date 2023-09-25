@@ -7,5 +7,10 @@
  * file that was distributed with this source code.
  */
 
+import { WriteFileOptions } from 'node:fs'
+
 export type { EntryInfo } from 'readdirp'
-export type { WriteFileOptions } from 'fs-extra'
+export type JSONFileOptions = WriteFileOptions & {
+  spaces?: number | string
+  replacer?: (this: any, key: string, value: any) => any
+}
