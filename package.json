@@ -60,8 +60,8 @@
     "slash": "^5.1.0"
   },
   "peerDependencies": {
-    "@japa/assert": "^2.0.0-1",
-    "@japa/runner": "^3.0.0-1"
+    "@japa/assert": "^2.0.0-2",
+    "@japa/runner": "^3.0.0-8"
   },
   "author": "virk,japa",
   "license": "MIT",
