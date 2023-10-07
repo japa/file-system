@@ -1,7 +1,7 @@
 # @japa/file-system
 > File system plugin for Japa
 
-[![gh-workflow-image]][gh-workflow-url] [![npm-image]][npm-url] ![][typescript-image] [![license-image]][license-url] [![snyk-image]][snyk-url]
+[![gh-workflow-image]][gh-workflow-url] [![npm-image]][npm-url] ![][typescript-image] [![license-image]][license-url]
 
 The file system plugin allows you to easily manage files and directories during tests and write assertions against them.
 
@@ -47,6 +47,3 @@ test('read rc file', async ({ fs }) => {
 
 [license-url]: LICENSE.md
 [license-image]: https://img.shields.io/github/license/japa/file-system?style=for-the-badge
-
-[snyk-image]: https://img.shields.io/snyk/vulnerabilities/github/japa/file-system?label=Snyk%20Vulnerabilities&style=for-the-badge
-[snyk-url]: https://snyk.io/test/github/japa/file-system?targetFile=package.json "snyk"
