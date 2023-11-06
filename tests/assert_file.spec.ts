@@ -13,7 +13,7 @@ import { rm } from 'node:fs/promises'
 
 import '../src/assert.js'
 import { FileSystem } from '../src/file_system.js'
-import { BASE_PATH } from '../test_helpers/index.js'
+import { BASE_PATH } from '../tests_helpers/index.js'
 
 test.group('Assert | fileExists', (group) => {
   group.each.setup(() => {

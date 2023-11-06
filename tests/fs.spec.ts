@@ -10,7 +10,7 @@
 import { test } from '@japa/runner'
 import { rm } from 'node:fs/promises'
 import { FileSystem } from '../src/file_system.js'
-import { BASE_PATH } from '../test_helpers/index.js'
+import { BASE_PATH } from '../tests_helpers/index.js'
 
 test.group('File system', (group) => {
   group.each.setup(() => {
