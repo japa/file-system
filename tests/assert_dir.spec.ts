@@ -44,7 +44,7 @@ test.group('Assert | dirExists', (group) => {
     customAssert.fs = new FileSystem(BASE_PATH)
 
     await customAssert.fs.create('foo/bar/baz.txt', 'hello world')
-    await assert.doesNotRejects(() => customAssert.dirExists('foo/bar'))
+    await assert.doesNotReject(() => customAssert.dirExists('foo/bar'))
   })
 })
 
@@ -77,7 +77,7 @@ test.group('Assert | dirNotExists', (group) => {
     const customAssert = new Assert()
     customAssert.fs = new FileSystem(BASE_PATH)
 
-    await assert.doesNotRejects(() => customAssert.dirNotExists('foo'))
+    await assert.doesNotReject(() => customAssert.dirNotExists('foo'))
   })
 })
 
@@ -116,7 +116,7 @@ test.group('Assert | hasFiles', (group) => {
     await customAssert.fs.create('foo/bar.txt', 'hello world')
     await customAssert.fs.create('foo/baz.txt', 'hi world')
 
-    await assert.doesNotRejects(() => customAssert.hasFiles(['foo/bar.txt', 'foo/baz.txt']))
+    await assert.doesNotReject(() => customAssert.hasFiles(['foo/bar.txt', 'foo/baz.txt']))
   })
 })
 
@@ -149,7 +149,7 @@ test.group('Assert | doesNotHaveFiles', (group) => {
     const customAssert = new Assert()
     customAssert.fs = new FileSystem(BASE_PATH)
 
-    await assert.doesNotRejects(() => customAssert.doesNotHaveFiles(['foo/bar.txt', 'foo/baz.txt']))
+    await assert.doesNotReject(() => customAssert.doesNotHaveFiles(['foo/bar.txt', 'foo/baz.txt']))
   })
 })
 
@@ -220,7 +220,7 @@ test.group('Assert | dirIsEmpty', (group) => {
     const customAssert = new Assert()
     customAssert.fs = new FileSystem(BASE_PATH)
 
-    await assert.doesNotRejects(() => customAssert.dirIsEmpty())
+    await assert.doesNotReject(() => customAssert.dirIsEmpty())
   })
 
   test('succeed when sub-directory is empty', async ({ assert }) => {
@@ -228,7 +228,7 @@ test.group('Assert | dirIsEmpty', (group) => {
     customAssert.fs = new FileSystem(BASE_PATH)
 
     await mkdir(join(BASE_PATH, 'foo'), { recursive: true })
-    await assert.doesNotRejects(() => customAssert.dirIsEmpty('foo'))
+    await assert.doesNotReject(() => customAssert.dirIsEmpty('foo'))
   })
 })
 
@@ -299,7 +299,7 @@ test.group('Assert | dirIsNotEmpty', (group) => {
     customAssert.fs = new FileSystem(BASE_PATH)
 
     await customAssert.fs.create('foo/bar.txt', 'hello world')
-    await assert.doesNotRejects(() => customAssert.dirIsNotEmpty('foo'))
+    await assert.doesNotReject(() => customAssert.dirIsNotEmpty('foo'))
   })
 
   test('succeed when filesystem source is not empty', async ({ assert }) => {
@@ -307,6 +307,6 @@ test.group('Assert | dirIsNotEmpty', (group) => {
     customAssert.fs = new FileSystem(BASE_PATH)
 
     await customAssert.fs.create('foo/bar.txt', 'hello world')
-    await assert.doesNotRejects(() => customAssert.dirIsNotEmpty())
+    await assert.doesNotReject(() => customAssert.dirIsNotEmpty())
   })
 })

@@ -37,7 +37,11 @@ declare module '@japa/assert' {
      * Assert file contents to contain a substring or match a regular
      * expression
      */
-    fileContains(filePath: string, substring: string | RegExp, message?: string): Promise<void>
+    fileContains(
+      filePath: string,
+      substring: string | string[] | RegExp,
+      message?: string
+    ): Promise<void>
 
     /**
      * Assert file contents to be same as other file's content
@@ -146,7 +150,12 @@ Assert.macro(
 
 Assert.macro(
   'fileContains',
-  async function (this: Assert, filePath: string, substring: string | RegExp, message?: string) {
+  async function (
+    this: Assert,
+    filePath: string,
+    substring: string | string[] | RegExp,
+    message?: string
+  ) {
     this.incrementAssertionsCount()
 
     const hasFile = await this.fs.exists(filePath)
@@ -166,7 +175,7 @@ Assert.macro(
     const onDiskContents = await this.fs.contents(filePath)
 
     /**
-     * Contains a substring
+     * Substring is a string value
      */
     if (typeof substring === 'string') {
       this.evaluate(
@@ -180,6 +189,28 @@ Assert.macro(
           operator: 'containsSubset',
         }
       )
+
+      return
+    }
+
+    /**
+     * Substring is an array of strings. All array items
+     * should be part of the file contents
+     */
+    if (Array.isArray(substring)) {
+      substring.forEach((one) => {
+        this.evaluate(
+          onDiskContents.includes(one),
+          'expected #{this} file contents to contain #{exp}',
+          {
+            thisObject: filePath,
+            expected: substring,
+            actual: onDiskContents,
+            prefix: message,
+            operator: 'containsSubset',
+          }
+        )
+      })
 
       return
     }

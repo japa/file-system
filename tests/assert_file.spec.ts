@@ -43,7 +43,7 @@ test.group('Assert | fileExists', (group) => {
     customAssert.fs = new FileSystem(BASE_PATH)
 
     await customAssert.fs.create('foo/bar', 'hello world')
-    await assert.doesNotRejects(() => customAssert.fileExists('foo/bar'))
+    await assert.doesNotReject(() => customAssert.fileExists('foo/bar'))
   })
 })
 
@@ -76,7 +76,7 @@ test.group('Assert | fileNotExists', (group) => {
     const customAssert = new Assert()
     customAssert.fs = new FileSystem(BASE_PATH)
 
-    await assert.doesNotRejects(() => customAssert.fileNotExists('foo/bar'))
+    await assert.doesNotReject(() => customAssert.fileNotExists('foo/bar'))
   })
 })
 
@@ -128,7 +128,7 @@ test.group('Assert | fileEquals', (group) => {
     customAssert.fs = new FileSystem(BASE_PATH)
 
     await customAssert.fs.create('foo/bar', 'hello world')
-    await assert.doesNotRejects(() => customAssert.fileEquals('foo/bar', 'hello world'))
+    await assert.doesNotReject(() => customAssert.fileEquals('foo/bar', 'hello world'))
   })
 })
 
@@ -202,7 +202,7 @@ test.group('Assert | fileContains', (group) => {
     customAssert.fs = new FileSystem(BASE_PATH)
 
     await customAssert.fs.create('foo/bar', 'hello world')
-    await assert.doesNotRejects(() => customAssert.fileContains('foo/bar', 'world'))
+    await assert.doesNotReject(() => customAssert.fileContains('foo/bar', 'world'))
   })
 
   test('work fine when file contents matches a regular expression', async ({ assert }) => {
@@ -210,7 +210,22 @@ test.group('Assert | fileContains', (group) => {
     customAssert.fs = new FileSystem(BASE_PATH)
 
     await customAssert.fs.create('foo/bar', 'hello world')
-    await assert.doesNotRejects(() => customAssert.fileContains('foo/bar', /world/))
+    await assert.doesNotReject(() => customAssert.fileContains('foo/bar', /world/))
+  })
+  test('check file for multiple matching strings', async ({ assert }) => {
+    const customAssert = new Assert()
+    customAssert.fs = new FileSystem(BASE_PATH)
+
+    await customAssert.fs.create(
+      'foo/bar',
+      `
+      const a = 'foo'
+      a.toUpperCase()
+    `
+    )
+    await assert.doesNotReject(() =>
+      customAssert.fileContains('foo/bar', [`const a = 'foo'`, 'a.toUpperCase()'])
+    )
   })
 })
 
@@ -327,7 +342,7 @@ test.group('Assert | fileIsEmpty', (group) => {
     customAssert.fs = new FileSystem(BASE_PATH)
 
     await customAssert.fs.create('foo/bar', '')
-    await assert.doesNotRejects(() => customAssert.fileIsEmpty('foo/bar', 'hello world'))
+    await assert.doesNotReject(() => customAssert.fileIsEmpty('foo/bar', 'hello world'))
   })
 })
 
@@ -379,6 +394,6 @@ test.group('Assert | fileIsNotEmpty', (group) => {
     customAssert.fs = new FileSystem(BASE_PATH)
 
     await customAssert.fs.create('foo/bar', '')
-    await assert.doesNotRejects(() => customAssert.fileIsEmpty('foo/bar', 'hello world'))
+    await assert.doesNotReject(() => customAssert.fileIsEmpty('foo/bar', 'hello world'))
   })
 })
