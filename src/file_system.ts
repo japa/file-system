@@ -12,7 +12,13 @@ import { pathToFileURL } from 'node:url'
 import { dirname, join } from 'node:path'
 import Macroable from '@poppinss/macroable'
 import { access, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises'
-import { type StatOptions, type WriteFileOptions, constants, RmOptions } from 'node:fs'
+import {
+  type StatOptions,
+  type WriteFileOptions,
+  constants,
+  RmOptions,
+  MakeDirectoryOptions,
+} from 'node:fs'
 
 import type { JSONFileOptions } from './types.js'
 
@@ -47,6 +53,15 @@ export class FileSystem extends Macroable {
    */
   async cleanup(options?: RmOptions) {
     return rm(this.basePath, { recursive: true, force: true, maxRetries: 10, ...options })
+  }
+
+  /**
+   * Creates a directory inside the root of the filesystem
+   * path. You may use this method to create nested
+   * directories as well.
+   */
+  mkdir(dirPath: string, options?: MakeDirectoryOptions) {
+    return mkdir(this.#makePath(dirPath), { recursive: true, ...options })
   }
 
   /**

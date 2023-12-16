@@ -34,6 +34,14 @@ test.group('File system', (group) => {
     assert.isFalse(await fs.rootExists())
   })
 
+  test('create directory', async ({ assert }) => {
+    const fs = new FileSystem(BASE_PATH)
+    await fs.mkdir('foo/bar')
+
+    const stats = await fs.stats('foo/bar')
+    assert.isTrue(stats.isDirectory())
+  })
+
   test('can extend file system class', async ({ assert }) => {
     //@ts-ignore
     FileSystem.macro('createHelloFile', function (this: Assert, path: string, name: string) {
