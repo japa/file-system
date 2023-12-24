@@ -204,7 +204,7 @@ Assert.macro(
           'expected #{this} file contents to contain #{exp}',
           {
             thisObject: filePath,
-            expected: substring,
+            expected: one,
             actual: onDiskContents,
             prefix: message,
             operator: 'containsSubset',
