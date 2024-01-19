@@ -397,3 +397,80 @@ test.group('Assert | fileIsNotEmpty', (group) => {
     await assert.doesNotReject(() => customAssert.fileIsEmpty('foo/bar', 'hello world'))
   })
 })
+
+test.group('Assert | fileNotContains', (group) => {
+  group.each.setup(() => {
+    return () => rm(BASE_PATH, { recursive: true, force: true, maxRetries: 10 })
+  })
+
+  test('report error when file is missing', async ({ assert }) => {
+    assert.plan(6)
+
+    const customAssert = new Assert()
+    customAssert.fs = new FileSystem(BASE_PATH)
+
+    try {
+      await customAssert.fileNotContains('foo/bar', 'hello world')
+    } catch (error) {
+      assert.equal(error.message, `expected 'foo/bar' file to exist`)
+      assert.equal(error.operator, 'exists')
+      assert.equal(error.actual, '')
+      assert.equal(error.expected, '')
+      assert.isFalse(error.showDiff)
+      assert.equal(customAssert.assertions.total, 1)
+    }
+  })
+
+  test('report error when file contents contains the unexpected string', async ({ assert }) => {
+    assert.plan(6)
+
+    const customAssert = new Assert()
+    customAssert.fs = new FileSystem(BASE_PATH)
+
+    await customAssert.fs.create('foo/bar', 'hi world')
+
+    try {
+      await customAssert.fileNotContains('foo/bar', 'world')
+    } catch (error) {
+      assert.equal(error.message, `expected 'foo/bar' file contents to not contain 'world'`)
+      assert.equal(error.operator, 'containsSubset')
+      assert.equal(error.actual, 'hi world')
+      assert.equal(error.expected, 'world')
+      assert.isFalse(error.showDiff)
+      assert.equal(customAssert.assertions.total, 1)
+    }
+  })
+
+  test('check file for multiple matching strings', async ({ assert }) => {
+    const customAssert = new Assert()
+    customAssert.fs = new FileSystem(BASE_PATH)
+
+    await customAssert.fs.create(
+      'foo/bar',
+      `
+      const a = 'foo'
+      a.toUpperCase()
+    `
+    )
+    await assert.doesNotReject(() =>
+      customAssert.fileNotContains('foo/bar', [`const b = 'foo'`, 'b.toUpperCase()'])
+    )
+  })
+
+  test('fail when file contains one of the unexpected values', async ({ assert }) => {
+    const customAssert = new Assert()
+    customAssert.fs = new FileSystem(BASE_PATH)
+
+    await customAssert.fs.create(
+      'foo/bar',
+      `
+      const a = 'foo'
+      a.toUpperCase()
+    `
+    )
+    await assert.rejects(
+      () => customAssert.fileNotContains('foo/bar', [`const b = 'foo'`, 'a.toUpperCase()']),
+      `expected 'foo/bar' file contents to not contain 'a.toUpperCase()'`
+    )
+  })
+})

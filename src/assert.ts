@@ -44,6 +44,12 @@ declare module '@japa/assert' {
     ): Promise<void>
 
     /**
+     * Assert file contents does not contain the given substrings or
+     * does not match the given regular expression
+     */
+    fileNotContains(filePath: string, substring: string | string[], message?: string): Promise<void>
+
+    /**
      * Assert file contents to be same as other file's content
      */
     fileSameAs(filePath: string, otherFilePath: string, message?: string): Promise<void>
@@ -227,6 +233,72 @@ Assert.macro(
         operator: 'strictEqual',
       }
     )
+  }
+)
+
+Assert.macro(
+  'fileNotContains',
+  async function (this: Assert, filePath: string, substring: string | string[], message?: string) {
+    this.incrementAssertionsCount()
+
+    const hasFile = await this.fs.exists(filePath)
+    if (!hasFile) {
+      this.evaluate(hasFile, 'expected #{this} file to exist', {
+        thisObject: filePath,
+        expected: '',
+        actual: '',
+        showDiff: false,
+        prefix: message,
+        operator: 'exists',
+      })
+
+      return
+    }
+
+    const onDiskContents = await this.fs.contents(filePath)
+
+    /**
+     * Substring is a string value
+     */
+    if (typeof substring === 'string') {
+      this.evaluate(
+        !onDiskContents.includes(substring),
+        `expected #{this} file contents to not contain '${substring}'`,
+        {
+          thisObject: filePath,
+          expected: substring,
+          actual: onDiskContents,
+          prefix: message,
+          showDiff: false,
+          operator: 'containsSubset',
+        }
+      )
+
+      return
+    }
+
+    /**
+     * Substring is an array of strings. All array items
+     * should be part of the file contents
+     */
+    if (Array.isArray(substring)) {
+      substring.forEach((one) => {
+        this.evaluate(
+          !onDiskContents.includes(one),
+          `expected #{this} file contents to not contain '${one}'`,
+          {
+            thisObject: filePath,
+            expected: one,
+            actual: onDiskContents,
+            prefix: message,
+            showDiff: false,
+            operator: 'containsSubset',
+          }
+        )
+      })
+
+      return
+    }
   }
 )
 
