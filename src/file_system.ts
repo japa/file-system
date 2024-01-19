@@ -118,6 +118,15 @@ export class FileSystem extends Macroable {
   }
 
   /**
+   * Dumps file contents to the stdout
+   */
+  async dump(filePath: string) {
+    console.log('------------------------------------------------------------')
+    console.log(`file path => "${filePath}"`)
+    console.log(`contents => "${await this.contents(filePath)}"`)
+  }
+
+  /**
    * Returns stats for a file
    */
   async stats(filePath: string, options?: StatOptions) {
