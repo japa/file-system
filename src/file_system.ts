@@ -7,10 +7,10 @@
  * file that was distributed with this source code.
  */
 
-import readDir from 'readdirp'
 import { pathToFileURL } from 'node:url'
 import { dirname, join } from 'node:path'
 import Macroable from '@poppinss/macroable'
+import { readdirpPromise, type EntryInfo } from 'readdirp'
 import { access, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises'
 import {
   type StatOptions,
@@ -136,10 +136,12 @@ export class FileSystem extends Macroable {
   /**
    * Recursively reads files from a given directory
    */
-  readDir(dirPath?: string): Promise<readDir.EntryInfo[]> {
+  readDir(dirPath?: string): Promise<EntryInfo[]> {
     return dirPath
-      ? readDir.promise(this.#makePath(dirPath), { type: 'files' })
-      : readDir.promise(this.basePath, { type: 'files' })
+      ? (readdirpPromise(this.#makePath(dirPath), { type: 'files' }) as unknown as Promise<
+          EntryInfo[]
+        >)
+      : (readdirpPromise(this.basePath, { type: 'files' }) as unknown as Promise<EntryInfo[]>)
   }
 
   /**
