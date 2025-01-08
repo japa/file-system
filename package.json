@@ -10,11 +10,11 @@
   "files": [
     "build",
     "!build/bin",
-    "!build/tests",
-    "!build/tests_helpers"
+    "!build/tests"
   ],
   "exports": {
-    ".": "./build/index.js"
+    ".": "./build/index.js",
+    "./types": "./build/src/types.js"
   },
   "scripts": {
     "pretest": "npm run lint",
@@ -57,10 +57,8 @@
   },
   "peerDependencies": {
     "@japa/assert": "^2.0.0 || ^3.0.0 || ^4.0.0",
-    "@japa/runner": "^3.0.0"
+    "@japa/runner": "^3.0.0 || ^4.0.0"
   },
-  "author": "virk,japa",
-  "license": "MIT",
   "homepage": "https://github.com/japa/file-system#readme",
   "repository": {
     "type": "git",
@@ -74,13 +72,16 @@
     "test",
     "file-system"
   ],
+  "author": "Harminder Virk <virk@adonisjs.com>",
+  "license": "MIT",
   "publishConfig": {
     "access": "public",
     "provenance": true
   },
   "tsup": {
     "entry": [
-      "./index.ts"
+      "./index.ts",
+      "./src/types.ts"
     ],
     "outDir": "./build",
     "clean": true,

@@ -1,6 +1,6 @@
-import { configure, processCLIArgs, run } from '@japa/runner'
 import { assert } from '@japa/assert'
 import { spec, dot } from '@japa/runner/reporters'
+import { configure, processCLIArgs, run } from '@japa/runner'
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +24,7 @@ configure({
     list: [spec(), dot()],
   },
 })
+
 /*
 |--------------------------------------------------------------------------
 | Run tests
