@@ -11,6 +11,7 @@ import { test } from '@japa/runner'
 import { rm } from 'node:fs/promises'
 import { BASE_PATH } from './helpers.js'
 import { FileSystem } from '../src/file_system.js'
+import { join } from 'node:path'
 
 test.group('File system', (group) => {
   group.each.setup(() => {
@@ -65,12 +66,12 @@ test.group('File system', (group) => {
       {
         path: 'baz.txt',
         basename: 'baz.txt',
-        fullPath: '/Users/virk/code/japa/file-system/tests/tmp/foo/bar/baz.txt',
+        fullPath: join(BASE_PATH, 'foo', 'bar', 'baz.txt'),
       },
       {
         path: 'baz/foo.txt',
         basename: 'foo.txt',
-        fullPath: '/Users/virk/code/japa/file-system/tests/tmp/foo/bar/baz/foo.txt',
+        fullPath: join(BASE_PATH, 'foo', 'bar', 'baz', 'foo.txt'),
       },
     ])
   })
