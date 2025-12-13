@@ -14,10 +14,10 @@ import { readdirpPromise, type EntryInfo } from 'readdirp'
 import { access, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises'
 import {
   constants,
-  RmOptions,
+  type RmOptions,
   type StatOptions,
   type WriteFileOptions,
-  MakeDirectoryOptions,
+  type MakeDirectoryOptions,
 } from 'node:fs'
 
 import type { JSONFileOptions } from './types.js'

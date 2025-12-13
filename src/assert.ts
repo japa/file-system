@@ -9,7 +9,7 @@
 
 import slash from 'slash'
 import { Assert } from '@japa/assert'
-import { FileSystem } from './file_system.js'
+import { type FileSystem } from './file_system.js'
 
 declare module '@japa/assert' {
   interface Assert {
