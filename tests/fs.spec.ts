@@ -54,4 +54,24 @@ test.group('File system', (group) => {
     await fs.createHelloFile('foo.json', 'jul')
     assert.deepEqual(await fs.contentsJson('foo.json'), { hello: 'jul' })
   })
+
+  test('read directories recurisvely', async ({ assert }) => {
+    const fs = new FileSystem(BASE_PATH)
+    await fs.create('foo/bar/baz.txt', 'hello world')
+    await fs.create('foo/bar/baz/foo.txt', 'hello world')
+
+    const files = await fs.readDir('foo/bar')
+    assert.containSubset(files, [
+      {
+        path: 'baz.txt',
+        basename: 'baz.txt',
+        fullPath: '/Users/virk/code/japa/file-system/tests/tmp/foo/bar/baz.txt',
+      },
+      {
+        path: 'baz/foo.txt',
+        basename: 'foo.txt',
+        fullPath: '/Users/virk/code/japa/file-system/tests/tmp/foo/bar/baz/foo.txt',
+      },
+    ])
+  })
 })

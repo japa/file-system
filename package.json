@@ -50,7 +50,6 @@
   },
   "dependencies": {
     "@poppinss/macroable": "^1.1.0",
-    "readdirp": "^5.0.0",
     "slash": "^5.1.0"
   },
   "peerDependencies": {

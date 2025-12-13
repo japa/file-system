@@ -7,8 +7,13 @@
  * file that was distributed with this source code.
  */
 
-import { type WriteFileOptions } from 'node:fs'
-export type { EntryInfo } from 'readdirp'
+import { type Dirent, type WriteFileOptions } from 'node:fs'
+export type EntryInfo = {
+  path: string
+  fullPath: string
+  basename: string
+  dirent: Dirent
+}
 
 export type JSONFileOptions = WriteFileOptions & {
   spaces?: number | string

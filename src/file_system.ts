@@ -8,10 +8,9 @@
  */
 
 import { pathToFileURL } from 'node:url'
-import { dirname, join } from 'node:path'
+import { dirname, join, relative } from 'node:path'
 import Macroable from '@poppinss/macroable'
-import { readdirpPromise, type EntryInfo } from 'readdirp'
-import { access, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises'
+import { access, mkdir, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises'
 import {
   constants,
   type RmOptions,
@@ -20,7 +19,7 @@ import {
   type MakeDirectoryOptions,
 } from 'node:fs'
 
-import type { JSONFileOptions } from './types.js'
+import type { EntryInfo, JSONFileOptions } from './types.js'
 
 /**
  * File system abstraction on top of `fs-extra` with a fixed basePath
@@ -136,12 +135,30 @@ export class FileSystem extends Macroable {
   /**
    * Recursively reads files from a given directory
    */
-  readDir(dirPath?: string): Promise<EntryInfo[]> {
-    return dirPath
-      ? (readdirpPromise(this.#makePath(dirPath), { type: 'files' }) as unknown as Promise<
-          EntryInfo[]
-        >)
-      : (readdirpPromise(this.basePath, { type: 'files' }) as unknown as Promise<EntryInfo[]>)
+  async readDir(dirPath?: string): Promise<EntryInfo[]> {
+    try {
+      const baseDir = dirPath ? this.#makePath(dirPath) : this.basePath
+      const entries = await readdir(baseDir, {
+        recursive: true,
+        withFileTypes: true,
+      })
+      return entries
+        .filter((entry) => entry.isFile())
+        .map((entry) => {
+          const fullPath = join(entry.parentPath, entry.name)
+          return {
+            basename: entry.name,
+            fullPath: join(entry.parentPath, entry.name),
+            dirent: entry,
+            path: relative(baseDir, fullPath),
+          } as EntryInfo
+        })
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        return []
+      }
+      throw error
+    }
   }
 
   /**
