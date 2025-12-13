@@ -49,7 +49,6 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@paralleldrive/cuid2": "^3.0.4",
     "@poppinss/macroable": "^1.1.0",
     "readdirp": "^5.0.0",
     "slash": "^5.1.0"

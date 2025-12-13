@@ -15,8 +15,8 @@ declare module '@japa/runner/core' {
 
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+import { randomUUID } from 'node:crypto'
 import { fileURLToPath } from 'node:url'
-import { createId } from '@paralleldrive/cuid2'
 import type { PluginFn } from '@japa/runner/types'
 import { TestContext, Test } from '@japa/runner/core'
 
@@ -28,7 +28,7 @@ import { FileSystem } from './src/file_system.js'
  */
 export function fileSystem(options?: { basePath?: string | URL; autoClean?: boolean }) {
   const normalizeOptions = Object.assign(
-    { basePath: join(tmpdir(), createId()), autoClean: true },
+    { basePath: join(tmpdir(), randomUUID()), autoClean: true },
     options
   )
 
