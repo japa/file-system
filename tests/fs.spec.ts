@@ -69,7 +69,7 @@ test.group('File system', (group) => {
         fullPath: join(BASE_PATH, 'foo', 'bar', 'baz.txt'),
       },
       {
-        path: 'baz/foo.txt',
+        path: join('baz', 'foo.txt'),
         basename: 'foo.txt',
         fullPath: join(BASE_PATH, 'foo', 'bar', 'baz', 'foo.txt'),
       },
